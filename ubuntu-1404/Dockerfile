@@ -9,6 +9,9 @@ COPY ["common/.vimrc", "common/.profile", "./root/"]
 
 WORKDIR /root
 
+ENV ALLOW_EXIT true
+
 CMD service ssh start > /dev/null && \
     service rsyslog start > /dev/null && \
-    while true ; do script -q -c "/bin/bash -l" /dev/null ; done
+    while ! "${ALLOW_EXIT}" ; do script -q -c "/bin/bash -l" /dev/null ; done && \
+    script -q -c "/bin/bash -l" /dev/null
